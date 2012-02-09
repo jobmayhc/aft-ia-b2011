@@ -92,7 +92,7 @@ public class Huristic implements Runnable{
 	}
 
 	@SuppressWarnings("deprecation")
-	public void setRuta(){ 	
+	public void setRuta(){
 		actual = MapCell.fin;
 		while(true){
 			MapCell proximo = AgentAFT.MAP.getMejorVecino(actual);
@@ -109,6 +109,7 @@ public class Huristic implements Runnable{
 					AgentAFT.AFT.doWait(2000);
 					AgentAFT.AFT.doWake();
 				}
+//			System.out.println( done.get(done.indexOf(actual)).costo );
 			actual = proximo;
 			actual.parteRuta = true;
 			try{Thread.sleep((int)actual.costo*1000);

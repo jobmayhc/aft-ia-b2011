@@ -15,7 +15,7 @@ public class MapCell extends Component implements Serializable{
 
 	static double pesoObstaculo = Global.TOTAL;
 	static int editMode = Global.OBSTACULO;
-	private static Vector<MapCell> cells = new Vector<MapCell>();
+	static Vector<MapCell> celda = new Vector<MapCell>();
 	static MapCell inicio, fin;
 	Point posicion;
 	double costo, distanciaInicio;
@@ -25,7 +25,7 @@ public class MapCell extends Component implements Serializable{
 		costo = 1;
 		distanciaInicio = -1;
 		uso = parteRuta = false;
-		cells.addElement(this);
+		celda.addElement(this);
 		enableEvents(AWTEvent.MOUSE_EVENT_MASK);
 	}
 
@@ -100,8 +100,8 @@ public class MapCell extends Component implements Serializable{
 	}
 
 	public static void reset(){
-		for(int i=0;i<cells.size();i++){
-			cells.elementAt(i).resetCell();
+		for( int i = 0 ; i < celda.size() ; i++ ){
+			 celda.elementAt(i).resetCell();
 		}
 	}
 	

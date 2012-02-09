@@ -21,4 +21,7 @@ public class Global {
     
     public static final int FILA = 10, COLUMNA = 10, DIRECCION = 4;
 
+    public static int getTime(){
+    	return (int)(java.util.Calendar.getInstance().getTimeInMillis()/1000)%100;  
+    }  
 }
