@@ -13,7 +13,7 @@ import javax.swing.*;
 public class Map extends JPanel implements Serializable{
 
 	public final Image imagen;
-	MapCell mapa[][];
+	public MapCell mapa[][];
 
 	public Map(){
 		imagen = new ImageIcon(getClass().getResource(Global.IMAG)).getImage();
@@ -50,7 +50,7 @@ public class Map extends JPanel implements Serializable{
 		double dist, lejos = Double.MAX_VALUE;
 		for( int i = 0 ; i < Global.DIRECCION ; i++ ){
 			if ( proximo[i] != null ){
-				dist = proximo[i].getDistanciaInicio();
+				dist = proximo[i].getDistanciaFin();
 				if( dist < lejos && dist >= 0 ){
 					cercano = proximo[i];
 					lejos = dist;

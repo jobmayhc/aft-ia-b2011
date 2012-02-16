@@ -8,34 +8,46 @@ package version3;
 import jade.core.behaviours.*;
 
 @SuppressWarnings("serial")
-public class _ir extends Behaviour {
-	
+public class _ir extends OneShotBehaviour {
+
 	public void action() {
-		System.out.println("_ir");
-		MapCell.actual = MapCell.fin;
-		while( true ){
+		MapCell.actual = MapCell.inicio;
+		while( AgentIA.conduciendo && Applet.gas.getValue() > 0 ){
 			MapCell proximo = AgentIA.MAP.getMejorVecino(MapCell.actual);
-			if( proximo.equals(MapCell.inicio) ) {
-				System.out.println("Llegue al Destino");
+			if( _buscar.copy.indexOf(proximo) > 0 && proximo.costo > _buscar.copy.elementAt(_buscar.copy.indexOf(proximo)).costo){
+				System.out.println("Hubo un cambio en la ruta");
+				MapCell.inicio = MapCell.actual;
+				AgentIA.AFT.stop();
+				AgentIA.AFT.drive();
 				break;
 			}else
 				if( MapCell.actual.equals(AgentIA.MAP.getMejorVecino(proximo)) ) {
 					System.out.println("Soy mi mejor vecino, hay un obstaculo");
-					MapCell.fin = MapCell.actual;
-					myAgent.addBehaviour(new _buscar());
-					myAgent.addBehaviour(new _ir());
+					MapCell.inicio = MapCell.actual;
+					AgentIA.AFT.stop();
+					AgentIA.AFT.drive();
 					break;
-				}
+				}else
+					if( proximo.equals(MapCell.fin) ) {
+						System.out.println("Llegue al Destino");
+						AgentIA.AFT.stop();
+						MapCell.reset(false);
+						break;
+					}
 			MapCell.actual = proximo;
 			MapCell.actual.parteRuta = true;
 			MapCell.actual.repaint();
 			myAgent.doWait((int)MapCell.actual.costo*1000);
+			Applet.gas.setValue(Applet.gas.getValue()-(int)MapCell.actual.costo);
+			if( Applet.gas.getValue() == 0 ){
+				MapCell.inicio = MapCell.actual;
+				AgentIA.AFT.stop();
+				myAgent.doWait(3000);
+				System.out.println("Me he quedado sin gasolina =.(");
+				AgentIA.ruta = false;
+				break;
+			}
 		}
 	}
 
-	public boolean done() {
-		myAgent.removeBehaviour(this);
-		System.out.println("Comportamiento _setRuta finalizado");
-		return true;
-	}            
 }

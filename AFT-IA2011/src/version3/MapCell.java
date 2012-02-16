@@ -13,20 +13,20 @@ import java.io.*;
 @SuppressWarnings("serial")
 public class MapCell extends Component implements Serializable{
 
-	public static Vector<MapCell> celda = new Vector<MapCell>();
 	public static MapCell inicio, fin, actual;
+	public static Vector<MapCell> celda = new Vector<MapCell>();
 	public Point posicion;
-	public double costo, distanciaInicio;
+	public double costo, distanciaFin;
 	public boolean usado, parteRuta;
 	
 	public MapCell(){
 		costo = 1;
-		distanciaInicio = -1;
+		distanciaFin = -1;
 		usado = parteRuta = false;
 		celda.addElement(this);
 		enableEvents(AWTEvent.MOUSE_EVENT_MASK);
 	}
-
+	
 	public void processMouseEvent(MouseEvent e){
 		super.processMouseEvent(e);
 		if( e.getID() == MouseEvent.MOUSE_PRESSED ){
@@ -47,24 +47,12 @@ public class MapCell extends Component implements Serializable{
 
 	public void addRuta(double dist){
 		usado = true;
-		if( distanciaInicio == -1 ){
-			distanciaInicio = dist + costo;
+		if( distanciaFin == -1 ){
+			distanciaFin = dist + costo;
 			return;
 		}
-		if( dist + costo < distanciaInicio )
-			distanciaInicio = dist + costo;
-	}
-
-	public void setInicio(boolean flag){
-		if(flag){
-			MapCell temp = this;
-			if( inicio != null ){
-				temp = inicio; temp.setInicio(false);
-				}
-			inicio = this;
-			repaint();
-			temp.repaint();
-		}
+		if( dist + costo < distanciaFin )
+			distanciaFin = dist + costo;
 	}
 
 	public void setFin(boolean flag){
@@ -72,8 +60,20 @@ public class MapCell extends Component implements Serializable{
 			MapCell temp = this;
 			if( fin != null ){
 				temp = fin; temp.setFin(false);
-			}
+				}
 			fin = this;
+			repaint();
+			temp.repaint();
+		}
+	}
+
+	public void setInicio(boolean flag){
+		if(flag){
+			MapCell temp = this;
+			if( inicio != null ){
+				temp = inicio; temp.setInicio(false);
+			}
+			inicio = this;
 			repaint();
 			temp.repaint();
 		}
@@ -84,19 +84,20 @@ public class MapCell extends Component implements Serializable{
 		else{costo = Global.NADA;}
 	}
 
-	private void resetCell(){
-		usado = parteRuta = false;
-		distanciaInicio = -1;
+	private void resetCell(boolean flag){
+		usado = false;
+		parteRuta = flag?parteRuta:false;
+		distanciaFin = -1;
 	}
 
-	public static void reset(){
+	public static void reset(boolean flag){
 		for( int i = 0 ; i < celda.size() ; i++ )
-			 celda.elementAt(i).resetCell();
+			 celda.elementAt(i).resetCell(flag);
 	}
 	
-	public double getDistanciaInicio(){
-		if( MapCell.inicio == this )	return 0;
-		return costo == Global.TOTAL?-1:distanciaInicio;
+	public double getDistanciaFin(){
+		if( MapCell.fin == this )	return 0;
+		return costo == Global.TOTAL?-1:distanciaFin;
 	}
 
 	public void paint(Graphics g){
@@ -113,7 +114,7 @@ public class MapCell extends Component implements Serializable{
 		if( fin == this )			{g.setColor(new Color(255,000,000,250));}
 		g.fillRect(0,0,size.width,size.height);
 		g.setColor(Color.GRAY);
-		if ( distanciaInicio > 0 )	g.drawString(""+distanciaInicio,1,(int)(size.height*0.75));
+//		if ( distanciaFin > 0 )	g.drawString(""+distanciaFin,1,(int)(size.height*0.75));
 		g.drawRect(0,0,size.width-1,size.height-1);    
 	}
 	
