@@ -6,7 +6,6 @@
 package version3;
 
 import java.awt.*;
-
 import javax.swing.*;
 
 @SuppressWarnings("serial")

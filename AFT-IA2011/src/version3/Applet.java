@@ -7,6 +7,7 @@ package version3;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 
 @SuppressWarnings("serial")
@@ -15,7 +16,7 @@ public class Applet extends JApplet implements ItemListener, ActionListener{
 	public static CheckboxGroup group;
 	public static Checkbox blocks, start, finish;
 	public static List level;
-	public static Button on, of, drive, stop;
+	public static Button on, off, drive, stop;
 	public static JProgressBar gas;
 
 	@SuppressWarnings({ "deprecation" })
@@ -31,14 +32,14 @@ public class Applet extends JApplet implements ItemListener, ActionListener{
 		level.addItem(" Total ",4);
 		group = new CheckboxGroup();
 		sel.add(blocks = new Checkbox("Obstaculo",group,false));	blocks.addItemListener(this);       
-		sel.add(start = new Checkbox("Destino",group,false));		start.addItemListener(this);
-		sel.add(finish = new Checkbox("Origen",group,false));		finish.addItemListener(this);
+		sel.add(finish = new Checkbox("Destino",group,false));		finish.addItemListener(this);
+		sel.add(start = new Checkbox("Origen",group,false));		start.addItemListener(this);
 		add(sel,BorderLayout.WEST);
 
 		Panel bot = new Panel( new GridLayout(1,5) );	
 		bot.add(gas= new JProgressBar(0,100) );		gas.setStringPainted(true);
 		bot.add(on = new Button("Encender"));		on.addActionListener(this);
-		bot.add(of = new Button("Apagar"));			of.addActionListener(this);
+		bot.add(off = new Button("Apagar"));		off.addActionListener(this);
 		bot.add(drive = new Button("Conducir"));	drive.addActionListener(this);
 		bot.add(stop = new Button("Detener"));		stop.addActionListener(this);
 		add(bot,BorderLayout.SOUTH);
@@ -65,18 +66,18 @@ public class Applet extends JApplet implements ItemListener, ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent e){
-		if( e.getSource().equals(on) )
+		if( e.getSource().equals(on) ){
 			AgentIA.AFT.on();
-		else
-			if( e.getSource().equals(of) )
-				AgentIA.AFT.of();
-			else
-				if( e.getSource().equals(drive) )
+		}else
+			if( e.getSource().equals(off) ){
+				AgentIA.AFT.off();
+			}else
+				if( e.getSource().equals(drive) ){
 					AgentIA.AFT.drive();
-				else
-					if( e.getSource().equals(stop) )
+				}else
+					if( e.getSource().equals(stop) ){
 						AgentIA.AFT.stop();
-
+					}
 	}
 
 }
