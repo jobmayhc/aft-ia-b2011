@@ -1,3 +1,8 @@
+/********************************************/
+/*	Proyecto Inteligencia Artificial B-2011	*/
+/*	Agente Viajero Rapido - AFT 			*/
+/*	Realizado por: Rafael J Torres			*/ 
+/********************************************/
 package version1;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;

@@ -1,0 +1,1 @@
+(deftemplate encendido (slot valor (type )))

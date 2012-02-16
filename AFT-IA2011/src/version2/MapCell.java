@@ -13,13 +13,13 @@ import java.io.*;
 @SuppressWarnings("serial")
 public class MapCell extends Component implements Serializable{
 
-	static double pesoObstaculo = Global.TOTAL;
-	static int editMode = Global.OBSTACULO;
-	static Vector<MapCell> celda = new Vector<MapCell>();
-	static MapCell inicio, fin;
-	Point posicion;
-	double costo, distanciaInicio;
-	boolean uso, parteRuta;
+	public static double pesoObstaculo = Global.TOTAL;
+	public static int editMode = Global.OBSTACULO;
+	public static Vector<MapCell> celda = new Vector<MapCell>();
+	public static MapCell inicio, fin;
+	public Point posicion;
+	public double costo, distanciaInicio;
+	public boolean uso, parteRuta;
 	
 	public MapCell(){
 		costo = 1;
@@ -124,6 +124,7 @@ public class MapCell extends Component implements Serializable{
 		if( fin == this )			{g.setColor(new Color(255,000,000,250));}
 		g.fillRect(0,0,size.width,size.height);
 		g.setColor(Color.GRAY);
+//		if ( distanciaInicio > 0 )	g.drawString(""+distanciaInicio,1,(int)(size.height*0.75));
 		g.drawRect(0,0,size.width-1,size.height-1);    
 	}
 			

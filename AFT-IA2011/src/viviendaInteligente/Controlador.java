@@ -14,7 +14,10 @@ import java.util.StringTokenizer;
 
 import java.lang.String;
 
-import jess.*;
+import jess.Jesp;
+import jess.JessException;
+import jess.Rete;
+import jessTest.*;
 
 @SuppressWarnings("serial")
 public class Controlador extends Agent{

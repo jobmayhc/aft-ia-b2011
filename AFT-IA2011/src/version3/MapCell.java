@@ -13,19 +13,16 @@ import java.io.*;
 @SuppressWarnings("serial")
 public class MapCell extends Component implements Serializable{
 
-	public static double pesoObstaculo = Global.TOTAL;
-	public static int editMode = Global.OBSTACULO;
 	public static Vector<MapCell> celda = new Vector<MapCell>();
-	public static MapCell inicio, fin;
+	public static MapCell inicio, fin, actual;
 	public Point posicion;
 	public double costo, distanciaInicio;
-	public boolean uso;
-	public boolean parteRuta;
+	public boolean usado, parteRuta;
 	
 	public MapCell(){
 		costo = 1;
 		distanciaInicio = -1;
-		uso = parteRuta = false;
+		usado = parteRuta = false;
 		celda.addElement(this);
 		enableEvents(AWTEvent.MOUSE_EVENT_MASK);
 	}
@@ -33,10 +30,9 @@ public class MapCell extends Component implements Serializable{
 	public void processMouseEvent(MouseEvent e){
 		super.processMouseEvent(e);
 		if( e.getID() == MouseEvent.MOUSE_PRESSED ){
-//			Global.AFT.doSuspend();
-			switch( editMode ){
+			switch( Global.EDIT ){
 				case( Global.OBSTACULO ):
-					costo = costo != pesoObstaculo ? pesoObstaculo : Global.TOTAL;
+					costo = costo != Global.TIPO ? Global.TIPO : Global.TOTAL;
 					repaint();
 				break;
 				case( Global.ORIGEN ):
@@ -47,28 +43,23 @@ public class MapCell extends Component implements Serializable{
 				break;
 			}
 		}
-		if( e.getID() == MouseEvent.MOUSE_RELEASED ){
-//			Global.AFT.doActivate();
-		}
 	}
 
-	public void addRutaInicio(double dist){
-		uso = true;
+	public void addRuta(double dist){
+		usado = true;
 		if( distanciaInicio == -1 ){
 			distanciaInicio = dist + costo;
 			return;
 		}
-		if( dist + costo < distanciaInicio ){
+		if( dist + costo < distanciaInicio )
 			distanciaInicio = dist + costo;
-		}
 	}
 
 	public void setInicio(boolean flag){
 		if(flag){
 			MapCell temp = this;
 			if( inicio != null ){
-				temp = inicio;
-				temp.setInicio(false);
+				temp = inicio; temp.setInicio(false);
 				}
 			inicio = this;
 			repaint();
@@ -80,8 +71,7 @@ public class MapCell extends Component implements Serializable{
 		if(flag){
 			MapCell temp = this;
 			if( fin != null ){
-				temp = fin;
-				temp.setFin(false);
+				temp = fin; temp.setFin(false);
 			}
 			fin = this;
 			repaint();
@@ -95,20 +85,18 @@ public class MapCell extends Component implements Serializable{
 	}
 
 	private void resetCell(){
-		uso = false;
-		parteRuta = false;
+		usado = parteRuta = false;
 		distanciaInicio = -1;
 	}
 
 	public static void reset(){
-		for( int i = 0 ; i < celda.size() ; i++ ){
+		for( int i = 0 ; i < celda.size() ; i++ )
 			 celda.elementAt(i).resetCell();
-		}
 	}
 	
 	public double getDistanciaInicio(){
 		if( MapCell.inicio == this )	return 0;
-		return isTotal()?-1:distanciaInicio;
+		return costo == Global.TOTAL?-1:distanciaInicio;
 	}
 
 	public void paint(Graphics g){
@@ -125,9 +113,8 @@ public class MapCell extends Component implements Serializable{
 		if( fin == this )			{g.setColor(new Color(255,000,000,250));}
 		g.fillRect(0,0,size.width,size.height);
 		g.setColor(Color.GRAY);
+		if ( distanciaInicio > 0 )	g.drawString(""+distanciaInicio,1,(int)(size.height*0.75));
 		g.drawRect(0,0,size.width-1,size.height-1);    
 	}
-			
-	public boolean isTotal(){return costo == Global.TOTAL;}
 	
 }

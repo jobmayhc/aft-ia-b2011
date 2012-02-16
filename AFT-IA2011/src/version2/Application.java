@@ -18,7 +18,7 @@ public class Application extends JFrame {
 		setMinimumSize(new Dimension(640,480));
 	}
 
-	public static void main(String args[]){
+	public static void main(String args[]){	
 		Applet app = new Applet();
 		Application exe = new Application();
 		exe.add(app);
