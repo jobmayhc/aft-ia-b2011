@@ -5,17 +5,16 @@
 /********************************************/
 package version3;
 
-import comportamientos.*;
-
 @SuppressWarnings("serial")
 public class AgentIA extends jade.core.Agent {
-
+	
 	public static Map MAP = new Map();
-	public static AgentIA AFT = new AgentIA();
-	public static Huristic BUS = new Huristic();
-	public static Thread HILO = new Thread();
-
+	public static boolean ruta;
+	public static AgentIA AFT;
+	public static boolean encendido, conduciendo;
+		
 	public void setup() {
+		AFT = this;
 		Application.main(null);
 		System.out.println("Bienvenido... Soy el Agente "+getLocalName());
 		/*
@@ -36,35 +35,55 @@ public class AgentIA extends jade.core.Agent {
 	}
 				
 	protected void takeDown() {
-		System.out.println("Adios...");
+		System.out.println("Adios...  Moriii xD");
 		doDelete();
-		//		Cierra la interfaz del agente
-		//		dispose();
-	}
-
-
-	public void doWait() {
-		System.out.println("doWait");
-		//		HILO.destroy();
-	}
-
-	public void doWake() {	
-		Huristic.actual = MapCell.fin;
-		addBehaviour(new goPath());
-		/*
-		MapCell.fin = Huristic.actual;
-		BUS.findRuta();
-		 */
-
 	}
 	
+	public boolean init(){
+		if( MapCell.inicio == null || MapCell.fin == null ){
+			System.out.println("Error al definir Origen->Destino");
+			return false;
+		}
+		ruta = encendido = conduciendo = false;
+		MapCell.reset();
+		return true;
+	}
+
+	public void on() {
+		if( !encendido ) {
+			encendido = true;
+			System.out.println("Encender vehiculo");
+		}else	System.out.println("Ya vehiculo");
+	}
 	
-
-
+	public void of() {
+		if( encendido ) {
+			encendido = true;
+			System.out.println("Apagar vehiculo");
+		}else	System.out.println("Ya esta apagado");
+	}
+	
+	public void drive() {
+		System.out.println("Iniciar manejo");
+		doWake();
+	}
+	
+	public void stop() {
+		System.out.println("Detenerr vehiculo");
+		doSuspend();
+	}
+	
+	public void doWake() {
+		if( ruta )
+		addBehaviour(new _ir());
+	}
+	
 	public void doSuspend() {
-//		AgentIA.BUS.findRuta();
-		System.out.println("***doSuspend*");
+		if( !init() )	return;
+		addBehaviour(new _buscar());
 	}
+	
 
+	
 
 }

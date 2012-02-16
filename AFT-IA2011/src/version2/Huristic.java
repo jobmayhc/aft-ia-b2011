@@ -10,10 +10,9 @@ import java.util.*;
 
 public class Huristic implements Runnable{
 
-	protected Vector<MapCell> edge, done;
+	protected Vector<MapCell> pendientes, revisados;
 	static MapCell actual, aux;
 	static double DistanciaInicio, costoMin;
-
 
 	public Huristic(){
 		DistanciaInicio = 0;
@@ -28,12 +27,12 @@ public class Huristic implements Runnable{
 		double dy1 = origen.y - destino.y;
 		double dx2 = actual.x - destino.x;
 		double dy2 = actual.y - destino.y;
-		return  minimo *(Math.abs(dy1*dx2-dx1*dy2)*0.002+Math.abs(dx2)+Math.abs(dy2));
+		return  (Math.abs(dy1*dx2-dx1*dy2)*0.002+Math.abs(dx2)+Math.abs(dy2));
 	}
 
 	public boolean findRuta(){
-		edge = new Vector<MapCell>();
-		done = new Vector<MapCell>();
+		pendientes = new Vector<MapCell>();
+		revisados = new Vector<MapCell>();
 		for( int c = 0 ; c < Global.COLUMNA ; c++ ){
 			for( int f= 0 ; f < Global.FILA ; f++){
 				costoMin = Math.min(AgentAFT.MAP.mapa[c][f].costo,costoMin);
@@ -50,7 +49,7 @@ public class Huristic implements Runnable{
 	}
 
 	public void run() {
-		edge.addElement(MapCell.inicio);
+		pendientes.addElement(MapCell.inicio);
 		int state = Global.NOT_FOUND;     
 		for( int pass = 0; (state == Global.NOT_FOUND && pass < Integer.MAX_VALUE) ; pass++ )	state = step();
 		if( state == Global.FOUND )	setRuta();
@@ -60,35 +59,35 @@ public class Huristic implements Runnable{
 	@SuppressWarnings("unchecked")
 	public int step(){
 		boolean found = false;
-		Vector<MapCell> temp = (Vector<MapCell>) edge.clone();
+		Vector<MapCell> temp = (Vector<MapCell>) pendientes.clone();
 		double min = Double.MAX_VALUE;
 		double score;
 		MapCell best = temp.elementAt(temp.size()-1);
 		MapCell now;
 		for( int i = 0 ; i < temp.size() ; i++ ){
 			now = temp.elementAt(i);
-			if( !done.contains(now) ){
+			if( !revisados.contains(now) ){
 				score = now.getDistanciaInicio();
 				score += findDistancia(now.posicion,MapCell.fin.posicion,costoMin);
 				if( score < min ){min = score;	best = now;}
 			}
 		}
 		now = best;
-		edge.removeElement(now);
-		done.addElement(now);
+		pendientes.removeElement(now);
+		revisados.addElement(now);
 		MapCell next[] = AgentAFT.MAP.getVecinos(now);
 		for( int i = 0 ; i < Global.DIRECCION ; i++ ){
 			if( next[i] != null ){
 				if( next[i] == MapCell.fin )	found = true;
 				if( !next[i].isTotal() ){
 					next[i].addRutaInicio(now.getDistanciaInicio());
-					if( !edge.contains(next[i]) && !done.contains(next[i]) )
-						edge.addElement(next[i]);
+					if( !pendientes.contains(next[i]) && !revisados.contains(next[i]) )
+						pendientes.addElement(next[i]);
 				}
 			}if(found)	return Global.FOUND;
 		}
 		AgentAFT.MAP.repaint();
-		return edge.size()==0?Global.NO_PATH:Global.NOT_FOUND;
+		return pendientes.size()==0?Global.NO_PATH:Global.NOT_FOUND;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -106,10 +105,10 @@ public class Huristic implements Runnable{
 				return;
 			}else
 				if( actual.equals(AgentAFT.MAP.getMejorVecino(proximo)) ) {
-					AgentAFT.AFT.doWait(2000);
-					AgentAFT.AFT.doWake();
+					AgentAFT.HILO.destroy();
+					MapCell.fin = Huristic.actual;
+					AgentAFT.BUS.findRuta();
 				}
-//			System.out.println( done.get(done.indexOf(actual)).costo );
 			actual = proximo;
 			actual.parteRuta = true;
 			try{Thread.sleep((int)actual.costo*1000);

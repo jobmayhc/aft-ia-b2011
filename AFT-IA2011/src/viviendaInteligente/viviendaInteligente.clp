@@ -91,7 +91,6 @@
 	(assert (nevera encendida))
 )
 
-
 ; Regla que cierra la puerta de la nevera si está abierta y con la nevera funcionando.
 (defrule neveraEncendida
 	(and

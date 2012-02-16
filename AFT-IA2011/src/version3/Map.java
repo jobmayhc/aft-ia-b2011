@@ -40,20 +40,6 @@ public class Map extends JPanel implements Serializable{
 			if( p.y > 0 )					vecino[2] = mapa[p.x][p.y-1];
 			if( p.y < Global.FILA-1 )		vecino[3] = mapa[p.x][p.y+1];			
 		}
-/*
-		if( p.y > 0 ){
-			if( p.x > 0 )				vecino[4] = mapa[p.x-1][p.y-1];	
-			if( p.x < Util.COLUMNA-1 )	vecino[5] = mapa[p.x+1][p.y-1];
-		}
-		if( p.y < Util.FILA-1 ){
-			if( p.x > 0 )				vecino[6] = mapa[p.x-1][p.y+1];	
-			if( p.x < Util.COLUMNA-1 )	vecino[7] = mapa[p.x+1][p.y+1];
-		}	
-		*/
-		
-		/*
-		 * 
-		 * */
 		return vecino;
 	}
 
@@ -64,7 +50,7 @@ public class Map extends JPanel implements Serializable{
 		double dist, lejos = Double.MAX_VALUE;
 		for( int i = 0 ; i < Global.DIRECCION ; i++ ){
 			if ( proximo[i] != null ){
-				dist = proximo[i].getDistanciaInicio();	
+				dist = proximo[i].getDistanciaInicio();
 				if( dist < lejos && dist >= 0 ){
 					cercano = proximo[i];
 					lejos = dist;

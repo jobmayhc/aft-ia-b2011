@@ -77,7 +77,6 @@ public class Applet extends JApplet implements ItemListener, ActionListener{
 					if( !Huristic.actual.equals(MapCell.inicio) )
 						go.setLabel("Reanudar");
 					else
-
 						go.setLabel("Iniciar");
 					reset.enable();
 				}else{
@@ -86,13 +85,8 @@ public class Applet extends JApplet implements ItemListener, ActionListener{
 							go.setLabel("Iniciar");
 							reset.enable();
 						}else{
-							if( AgentAFT.HILO.isAlive() ){
+							if( AgentAFT.HILO.isAlive() )
 								AgentAFT.HILO.resume();
-							}
-							/*
-
-							repaint();
-							*/
 							go.setLabel("Detener");
 							reset.disable();
 						}
