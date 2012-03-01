@@ -6,5 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JADE"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JESS"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JUNG"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JUNG2"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
